@@ -13,7 +13,7 @@ export async function login() {
   });
 
   const page = (await browser.pages())[0];
-  
+
   await page.goto("https://leetcode.com/accounts/login/");
   await page.waitForFunction(
     'document.location.href == "https://leetcode.com/"',
@@ -26,6 +26,8 @@ export async function login() {
   const result = await client.send("Network.getAllCookies");
 
   await browser.close();
+
+  console.log("Logged in successfully!");
 
   const leetcodeSessionCookie = result.cookies.find(
     (cookie) => cookie.name == "LEETCODE_SESSION"

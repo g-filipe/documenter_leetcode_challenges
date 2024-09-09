@@ -1,6 +1,8 @@
 import { getBrowserPage } from "./browser.js";
 
 export async function getChallengesLinksFromList(url) {
+  console.log('Retrieving challenge list...');
+
   const page = await getBrowserPage();
 
   await page.goto(url);
@@ -10,6 +12,8 @@ export async function getChallengesLinksFromList(url) {
     'div[data-rbd-draggable-context-id] a[href^="/problems/"]'
   );
 
+  console.log('Challenge list retrieved successfully!');
+  
   return challenges;
 }
 

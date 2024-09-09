@@ -138,7 +138,7 @@ async function getSubmissionList(challengeId, leetcodeSession) {
       cookie: `LEETCODE_SESSION=${leetcodeSession}`,
     }
   );
-  console.log(res.questionSubmissionList.submissions[0]);
+
   const codeLangSubmission = {};
 
   const submissionList = res.questionSubmissionList.submissions.filter(

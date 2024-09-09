@@ -5,6 +5,7 @@ import { writeFileSync, existsSync } from "fs";
 import sanitizeFilename from "sanitize-filename";
 import { generateFromTemplate } from "./template.js";
 import { langExtensions } from "./langExtensions.js";
+import { blue } from "yoctocolors";
 
 export async function documenter(url) {
   const challengeInfo = await getChallengeInfo(url);
@@ -31,6 +32,9 @@ export async function documenter(url) {
       submission.code
     );
   }
+  console.log(
+    `Challenge ${blue(challengeInfo.title)} documented successfully!`
+  );
 }
 
 function sleep(ms) {
