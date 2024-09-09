@@ -3,14 +3,9 @@ import puppeteer from "puppeteer";
 let leetcodeSession;
 
 export async function login() {
-  
-  if (leetcodeSession) {
-    return leetcodeSession;
-  }
-
   const browser = await puppeteer.launch({
     headless: false,
-    userDataDir:'session'
+    userDataDir: "session",
   });
 
   const page = await browser.newPage();
@@ -32,6 +27,11 @@ export async function login() {
   );
 
   leetcodeSession = leetcodeSessionCookie.value;
+}
 
+export async function getLeetcodeSession() {
+  if (!leetcodeSession) {
+    await login();
+  }
   return leetcodeSession;
 }
