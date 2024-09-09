@@ -1,26 +1,13 @@
-import puppeteer from "puppeteer";
+import { getBrowserPage } from "./browser.js";
+import { getSubmissionCodeList } from "./getSubmission.js";
 import { getLeetcodeSession } from "./login.js";
 import { markdownConverter } from "./markdownConverter.js";
 
-let isSql = process.env.IS_SQL == 'true';
-
 export async function getChallengeInfo(url) {
-  const browser = await puppeteer.launch({
-    headless: false,
-  });
-  const page = await browser.newPage();
-
+  const page = await getBrowserPage();
   await page.goto(url);
 
-  let description;
-
-  if (isSql) {
-    description = await getElementContent(page, ".elfjS");
-    description = markdownConverter(description);
-  
-  } else {
-    description = await getElementInnerHtml(page, ".elfjS");
-  }
+  let description = await getElementContent(page, ".elfjS");
 
   const title = await getElementContent(page, ".text-title-large");
   const difficulty = await getElementContent(
@@ -28,16 +15,20 @@ export async function getChallengeInfo(url) {
     'div[class*="text-difficulty-"]'
   );
 
-  await browser.close();
-
   const challengeId = getChallengeId(url);
-  const submission = await getSubmissionCode(challengeId, await getLeetcodeSession());
+  const submissionList = await getSubmissionCodeList(
+    challengeId,
+    await getLeetcodeSession()
+  );
+  if (isSql(submissionList)) {
+    description = markdownConverter(description);
+  }
 
   return {
     title,
     difficulty,
     description,
-    submission
+    submissionList,
   };
 }
 
@@ -59,6 +50,12 @@ async function getElementInnerHtml(page, selector) {
 
 export function getChallengeId(url) {
   const challengeId = url.match(/problems\/([^\/?]*)/)[1];
-  console.log({ challengeId });
   return challengeId;
+}
+
+const sqlLangs = ['mysql', 'mssql', 'oraclesql','pythondata','postgresql']
+
+function isSql(submissionList) {
+  return submissionList.some((submission) => sqlLangs.includes(submission.lang))
+
 }

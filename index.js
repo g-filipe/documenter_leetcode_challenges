@@ -19,4 +19,4 @@ for (const url of urls) {
 
 await closeBrowser();
 
-generateMainReadme();
+// generateMainReadme();

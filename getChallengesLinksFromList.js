@@ -1,12 +1,7 @@
-import puppeteer from "puppeteer";
+import { getBrowserPage } from "./browser.js";
 
 export async function getChallengesLinksFromList(url) {
-  const browser = await puppeteer.launch({
-    headless: false,
-    userDataDir: 'session'
-  });
-
-  const page = await browser.newPage();
+  const page = await getBrowserPage();
 
   await page.goto(url);
 
@@ -14,8 +9,6 @@ export async function getChallengesLinksFromList(url) {
     page,
     'div[data-rbd-draggable-context-id] a[href^="/problems/"]'
   );
-
-  await browser.close();
 
   return challenges;
 }

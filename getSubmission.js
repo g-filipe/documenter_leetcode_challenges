@@ -1,7 +1,8 @@
 import { gql, request } from "graphql-request";
 
-export async function getSubmissionCode(challengeId, leetcodeSession) {
-  const submissionId = await getSubmissionId(challengeId, leetcodeSession);
+export async function getSubmissionCodeList(challengeId, leetcodeSession) {
+  const submissionList = await getSubmissionList(challengeId, leetcodeSession);
+
   const document = gql`
     query submissionDetails($submissionId: Int!) {
       submissionDetails(submissionId: $submissionId) {
@@ -54,24 +55,32 @@ export async function getSubmissionCode(challengeId, leetcodeSession) {
       }
     }
   `;
-  const res = await request(
-    "https://leetcode.com/graphql/",
-    document,
-    {
-      submissionId: submissionId,
-    },
-    {
-      authority: "leetcode.com",
-      "content-type": "application/json",
-      cookie: `LEETCODE_SESSION=${leetcodeSession}`,
-    }
-  );
-  const submissionCode = res.submissionDetails.code;
-  console.log(submissionCode);
-  return submissionCode;
+
+  let submissionInfos = [];
+
+  for (const submission of submissionList) {
+    const res = await request(
+      "https://leetcode.com/graphql/",
+      document,
+      {
+        submissionId: submission.id,
+      },
+      {
+        authority: "leetcode.com",
+        "content-type": "application/json",
+        cookie: `LEETCODE_SESSION=${leetcodeSession}`,
+      }
+    );
+    submissionInfos.push({
+      code: res.submissionDetails.code,
+      lang: submission.lang,
+    });
+  }
+
+  return submissionInfos;
 }
 
-async function getSubmissionId(challengeId, leetcodeSession) {
+async function getSubmissionList(challengeId, leetcodeSession) {
   const document = gql`
     query submissionList(
       $offset: Int!
@@ -129,9 +138,21 @@ async function getSubmissionId(challengeId, leetcodeSession) {
       cookie: `LEETCODE_SESSION=${leetcodeSession}`,
     }
   );
-  const submissionId = res.questionSubmissionList.submissions.filter(
-    (sub) => sub.statusDisplay == "Accepted"
-  )[0].id;
-  
-  return submissionId;
+  console.log(res.questionSubmissionList.submissions[0]);
+  const codeLangSubmission = {};
+
+  const submissionList = res.questionSubmissionList.submissions.filter(
+    (sub) => {
+      if (sub.statusDisplay != "Accepted") {
+        return false;
+      }
+      if (!codeLangSubmission[sub.lang]) {
+        codeLangSubmission[sub.lang] = true;
+        return true;
+      }
+      return false;
+    }
+  );
+
+  return submissionList;
 }

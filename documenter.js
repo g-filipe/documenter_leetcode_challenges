@@ -4,6 +4,7 @@ import { getChallengeInfo } from "./getChallengeInfo.js";
 import { writeFileSync, existsSync } from "fs";
 import sanitizeFilename from "sanitize-filename";
 import { generateFromTemplate } from "./template.js";
+import { langExtensions } from "./langExtensions.js";
 
 export async function documenter(url) {
   const challengeInfo = await getChallengeInfo(url);
@@ -20,18 +21,16 @@ export async function documenter(url) {
 
   await sleep(2000);
 
-  try {
-    execSync(`mkdir -p ${projectDir}/challenges/${folderName}`);
-    console.log(`Pasta ${folderName} criada com sucesso!`);
-  } catch (error) {
-    console.error(`Erro ao criar a pasta ${folderName}:`, error);
-  }
+  for (const submission of challengeInfo.submissionList) {
+    const dir = `${projectDir}/${submission.lang}/${folderName}`;
+    execSync(`mkdir -p ${dir}`);
+    writeFileSync(`${dir}/README.md`, readme);
 
-  writeFileSync(`${projectDir}/challenges/${folderName}/README.md`, readme);
-  writeFileSync(
-    `${projectDir}/challenges/${folderName}/solution.sql`,
-    challengeInfo.submission
-  );
+    writeFileSync(
+      `${dir}/solution${langExtensions[submission.lang]}`,
+      submission.code
+    );
+  }
 }
 
 function sleep(ms) {

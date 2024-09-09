@@ -3,12 +3,17 @@ import puppeteer from "puppeteer";
 let leetcodeSession;
 
 export async function login() {
+  console.log("Logging in... ");
+
   const browser = await puppeteer.launch({
     headless: false,
     userDataDir: "session",
+    defaultViewport: null,
+    args: ["--hide-crash-restore-bubble"],
   });
 
-  const page = await browser.newPage();
+  const page = (await browser.pages())[0];
+  
   await page.goto("https://leetcode.com/accounts/login/");
   await page.waitForFunction(
     'document.location.href == "https://leetcode.com/"',
