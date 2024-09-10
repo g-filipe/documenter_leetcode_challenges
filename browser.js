@@ -9,6 +9,8 @@ export async function getBrowserPage() {
     browser = await puppeteer.launch({
       headless: false,
       userDataDir: "session",
+      defaultViewport: null,
+      args: ["--hide-crash-restore-bubble"],
     });
   }
 

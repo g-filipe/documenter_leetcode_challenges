@@ -2,28 +2,28 @@ import "dotenv/config";
 import { execSync } from "child_process";
 import { getChallengeInfo } from "./getChallengeInfo.js";
 import { writeFileSync, existsSync } from "fs";
-import sanitizeFilename from "sanitize-filename";
 import { generateFromTemplate } from "./template.js";
 import { langExtensions } from "./langExtensions.js";
 import { blue } from "yoctocolors";
+import path from "path";
+import { sanitizeFolderName, sleep } from "./utils.js";
 
-export async function documenter(url) {
+export async function documenter(listName, category, url) {
   const challengeInfo = await getChallengeInfo(url);
   const readme = generateFromTemplate("challengeReadme.hbs", challengeInfo);
   const projectDir = process.env.PROJECT_DIR_PATH;
-  const folderName = sanitizeFilename(
-    challengeInfo.title.replace(".", "").replaceAll(" ", "_"),
-    { replacement: "_" }
-  );
-
-  if (existsSync(`${projectDir}/${folderName}`)) {
-    return;
-  }
+  const folderName = sanitizeFolderName(challengeInfo.title);
 
   await sleep(2000);
 
   for (const submission of challengeInfo.submissionList) {
-    const dir = `${projectDir}/${submission.lang}/${folderName}`;
+    const dir = path.join(
+      projectDir,
+      sanitizeFolderName(listName),
+      submission.lang,
+      sanitizeFolderName(category) ?? "",
+      folderName
+    );
     execSync(`mkdir -p ${dir}`);
     writeFileSync(`${dir}/README.md`, readme);
 
@@ -35,8 +35,4 @@ export async function documenter(url) {
   console.log(
     `Challenge ${blue(challengeInfo.title)} documented successfully!`
   );
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
