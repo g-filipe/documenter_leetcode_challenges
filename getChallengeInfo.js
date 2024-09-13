@@ -7,7 +7,7 @@ export async function getChallengeInfo(url) {
   const page = await getBrowserPage();
   await page.goto(url);
 
-  let description = await getElementContent(page, ".elfjS");
+  let description;
 
   const title = await getElementContent(page, ".text-title-large");
   const difficulty = await getElementContent(
@@ -20,8 +20,16 @@ export async function getChallengeInfo(url) {
     challengeId,
     await getLeetcodeSession()
   );
-  if (isSql(submissionList)) {
+
+  const codeLang = await page.evaluate(
+    () => document.querySelectorAll(".popover-wrapper button")[1].textContent
+  );
+
+  if (isSql(codeLang)) {
+    description = await getElementContent(page, ".elfjS");
     description = markdownConverter(description);
+  } else {
+    description = await getElementInnerHtml(page, ".elfjS");
   }
 
   return {
@@ -53,9 +61,8 @@ export function getChallengeId(url) {
   return challengeId;
 }
 
-const sqlLangs = ['mysql', 'mssql', 'oraclesql','pythondata','postgresql']
+const sqlLangs = ["MySQL","MS SQL Server", "Oracle", "Pandas", "PostgreSQL"];
 
-function isSql(submissionList) {
-  return submissionList.some((submission) => sqlLangs.includes(submission.lang))
-
+function isSql(codeLang) {
+  return sqlLangs.includes(codeLang);
 }
