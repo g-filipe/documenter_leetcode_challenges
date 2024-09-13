@@ -1,10 +1,10 @@
 import "dotenv/config";
 import { execSync } from "child_process";
 import { getChallengeInfo } from "./getChallengeInfo.js";
-import { writeFileSync, existsSync } from "fs";
+import { writeFileSync } from "fs";
 import { generateFromTemplate } from "./template.js";
 import { langExtensions } from "./langExtensions.js";
-import { blue } from "yoctocolors";
+import { blue, red } from "yoctocolors";
 import path from "path";
 import { sanitizeFolderName, sleep } from "./utils.js";
 
@@ -21,7 +21,7 @@ export async function documenter(listName, category, url) {
       projectDir,
       sanitizeFolderName(listName),
       submission.lang,
-      sanitizeFolderName(category) ?? "",
+      category ? sanitizeFolderName(category) : "",
       folderName
     );
     execSync(`mkdir -p ${dir}`);
@@ -32,7 +32,13 @@ export async function documenter(listName, category, url) {
       submission.code
     );
   }
-  console.log(
-    `Challenge ${blue(challengeInfo.title)} documented successfully!`
-  );
+  if (challengeInfo.submissionList.length == 0) {
+    console.log(
+      `${blue(challengeInfo.title)} ${red("- there isn't any solution for this challenge!\n")}`
+    );
+  } else {
+    console.log(
+      `${blue(challengeInfo.title)} documented successfully!\n`
+    );
+  }
 }

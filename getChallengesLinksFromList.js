@@ -1,3 +1,4 @@
+import { bgYellow, green } from "yoctocolors";
 import { getBrowserPage } from "./browser.js";
 
 export async function getChallengesLinksFromList(url) {
@@ -37,7 +38,7 @@ export async function getChallengesLinksFromList(url) {
     );
   }
 
-  console.log("Challenge list retrieved successfully!");
+  console.log(green('Challenge list retrieved successfully!\n'));
 
   return {
     listName,

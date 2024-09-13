@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import { bgYellow } from "yoctocolors";
 
 let leetcodeSession;
 
@@ -27,7 +28,7 @@ export async function login() {
 
   await browser.close();
 
-  console.log("Logged in successfully!");
+  console.log(bgYellow('Logged in successfully!'));
 
   const leetcodeSessionCookie = result.cookies.find(
     (cookie) => cookie.name == "LEETCODE_SESSION"

@@ -22,7 +22,7 @@ export async function getChallengeInfo(url) {
   );
 
   const codeLang = await page.evaluate(
-    () => document.querySelectorAll(".popover-wrapper button")[1].textContent
+    () => document.querySelectorAll(".popover-wrapper button")[1]?.textContent
   );
 
   if (isSql(codeLang)) {
