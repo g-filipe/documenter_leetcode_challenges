@@ -1,0 +1,45 @@
+<p align="center">
+  <img
+    src="https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png"
+    alt=""
+    width="25%"
+  />
+</p>
+
+<h3 align="center">
+  SQL Codewars Challenges
+</h3>
+
+<br />
+
+<div style="display:flex; align-items:center;">
+  <img
+    src="https://www.codewars.com/packs/assets/logo.f607a0fb.svg"
+    width="3%"
+  />
+  <a href="https://www.codewars.com/users/g-filipe">&nbsp; Codewars profile</a>
+</div>
+
+<br />
+
+{{#each languageFolders}}
+  <table>
+    <tbody>
+      <th colspan="2">{{lang}}</th>
+      <tr>
+        <th>Problem</th>
+        <th>Difficulty</th>
+      </tr>
+      {{#each challenges}}
+        <tr>
+          <td>
+            <a href="{{url}}">{{title}}</a>
+          </td>
+          <td>
+            ${\color{ {{~difficultyColor~}} }\text{ {{~difficulty~}} }}$
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{/each}}

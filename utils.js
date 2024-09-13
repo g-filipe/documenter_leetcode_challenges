@@ -13,3 +13,7 @@ export function sanitizeFolderName (folderName) {
     .replaceAll(/_+/g, "_")
     .replace(/_$/, "");
 }
+
+export function isStudyPlan(url) {
+  return url.includes("/studyplan/")
+}

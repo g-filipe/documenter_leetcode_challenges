@@ -1,0 +1,42 @@
+<p align="center">
+  <img src="https://assets.leetcode.com/static_assets/others/Top_SQL_50_static_cover_picture.png" alt="" width="20%">
+</p>
+<h2 align="center">
+  <a href={{challengeUrlList}}>{{listName}} by LeetCode</a>
+</h2>
+<div style="display:flex; align-items:center;" >
+  <img alt="leetcode logo" src="https://user-images.githubusercontent.com/63964149/152531278-5e01909d-0c2e-412a-8acc-4a06863c244d.png" width="3%"/>
+  <a href={{leetcodeProfile}}>My leetcode profile</a>
+</div>
+<br>
+<i>{{listDescription}}</i> <br>
+
+<h3>Summary</h3>
+{{{summaryList}}}
+
+<br />
+
+{{#each languageFolders}}
+  <table>
+    <thead>
+      <th colspan="2">{{lang}}</th>
+    </thead>
+    <tbody>
+      {{#each categoryFolders}}
+        <tr>
+          <th colspan="2">{{category}}</th>
+        </tr>
+        {{#each challenges}}
+          <tr>
+            <td>
+              <a href="{{url}}">{{title}}</a>
+            </td>
+            <td>
+              ${\color{ {{~difficultyColor~}} }\text{ {{~difficulty~}} }}$
+            </td>
+          </tr>
+        {{/each}}
+      {{/each}}
+    </tbody>
+  </table>
+{{/each}}
