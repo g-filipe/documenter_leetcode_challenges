@@ -1,23 +1,24 @@
 <p align="center">
   <img
-    src="https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png"
+    src=""
     alt=""
     width="25%"
   />
 </p>
 
-<h3 align="center">
-  SQL Codewars Challenges
-</h3>
+<h2 align="center">
+  {{listName}}
+</h2>
 
 <br />
 
 <div style="display:flex; align-items:center;">
   <img
-    src="https://www.codewars.com/packs/assets/logo.f607a0fb.svg"
+    alt="leetcode logo"
+    src="https://user-images.githubusercontent.com/63964149/152531278-5e01909d-0c2e-412a-8acc-4a06863c244d.png"
     width="3%"
   />
-  <a href="https://www.codewars.com/users/g-filipe">&nbsp; Codewars profile</a>
+  <a href={{leetcodeProfile}}>My leetcode profile</a>
 </div>
 
 <br />
@@ -36,7 +37,11 @@
             <a href="{{url}}">{{title}}</a>
           </td>
           <td>
-            ${\color{ {{~difficultyColor~}} }\text{ {{~difficulty~}} }}$
+            ${\color{
+            {{~difficultyColor~}}
+            }\text{
+            {{~difficulty~}}
+            }}$
           </td>
         </tr>
       {{/each}}
